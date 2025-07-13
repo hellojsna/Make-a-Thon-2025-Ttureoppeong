@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>스마트 도로 모니터링 시스템 | 뚫어뻥</title>
+    <style>
+        @import url('./resources/css/reset.css');
+        @import url('./resources/css/root.css');
+
+        #MonitorMain {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            background-color: var(--PrimaryBackground);
+        }
+        #WaterLevelCanvas {
+            border-radius: 25px;
+            background-color: var(--SecondaryBackground);
+        }
+        #WaterLevelGraph h2 {
+            color: var(--PrimaryText);
+            text-align: left;
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+    </style>
+</head>
+<body>
+    <h1 style="position: fixed; left: 0; top: 0; padding: 1rem;">스마트 도로 모니터링 시스템</h1>
+    <div id="MonitorMain">
+        <div id="WaterLevelGraph">
+            <h2>실시간 수위 현황</h2>
+            <canvas id="WaterLevelCanvas" width="600" height="600"></canvas>
+        </div>
+    </div>
+    <script>
+        const canvas = document.getElementById('WaterLevelCanvas');
+        const ctx = canvas.getContext('2d');
+        const maxPoints = 100;
+        let dataPoints = [];
+
+        function drawGraph() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            // 기준선 그리기 - 이 위로 상승하면 햄스터봇이 작동함 (Ttureoppeong2025HamsterBot/wireless.py 참조).
+            ctx.beginPath();
+            ctx.moveTo(0, canvas.height - 500);
+            ctx.lineTo(canvas.width, canvas.height - 500);
+            ctx.strokeStyle = "#909090";
+            ctx.lineWidth = 1;
+            ctx.stroke();
+
+            // 그래프 그리기
+            ctx.beginPath();
+            ctx.moveTo(0, canvas.height - dataPoints[0]);
+            for (let i = 1; i < dataPoints.length; i++) {
+                ctx.lineTo(i * (canvas.width / maxPoints), canvas.height - dataPoints[i]);
+            }
+            ctx.strokeStyle = dataPoints[dataPoints.length - 1] >= 500 ? "#ff453a" : "#0084ff";
+            ctx.lineWidth = 2;
+            ctx.stroke();
+        }
+
+        function fetchLevel() {
+            console.log('수위 정보 가져오는 중...');
+            const xhr = new XMLHttpRequest();
+            xhr.open('GET', 'http://192.168.4.1/api/getLevelSensor');
+            xhr.onload = function() {
+                if (xhr.status === 200) {
+                    const text = xhr.responseText;
+                    console.log('Response:', text);
+                    const value = parseInt(text, 10);
+                    if (isNaN(value)) {
+                        console.error('잘못된 값:', text);
+                    } else {
+                        console.log('수위 측정 값:', value);
+                        if (dataPoints.length >= maxPoints) dataPoints.shift();
+                        dataPoints.push(value);
+                        drawGraph();
+                    }
+                } else {
+                    console.error('HTTP 오류:', xhr.status);
+                }
+            };
+            xhr.onerror = function() {
+                console.error('수위 정보 가져오는 중 오류 발생 (XHR)');
+            };
+            xhr.send();
+        }
+
+        setInterval(fetchLevel, 1000);
+    </script>
+</body>
+</html>
