@@ -2,6 +2,8 @@
 
 [한국어 버전 이용 가능](./README.md)
 
+This repository only contains code written by me.
+
 ![Photo of a device we built for a demonstration. On the left side of the photo is a device for cleaning sewers, and on the right is a sensor that can measure the water level in the sewer.](README-images/FullView.jpg)
 
 Gyeonggi-do Goyang Office of Education **2025 AI Make-a-Thon** Project
@@ -16,7 +18,7 @@ Gyeonggi-do Goyang Office of Education **2025 AI Make-a-Thon** Project
 **13**: Climate Action
 
 ## Motivation for Choosing a Topic
-![The title "Smart Road" is written in large letters below the statement that it meets three of the Sustainable Development Goals. Below that, the problem analysis and solution are presented in the shape of a road, with "Water flooding the road", "Clogged drains on the road", "Why?", "Leaves, cigarette stub, garbage", "How?", and "Weather prediction AI + Sewer cleaning robot + Water level detection robot".](README-images/IdeaBoard.jpg)
+![The title "Smart Road" is written in large letters below the statement that it meets three of the Sustainable Development Goals. Below that, the problem analysis and solution are presented in the shape of a road, with "Water flooding the road", "Clogged drains on the road", "Why?", "Leaves, cigarette stub, garbage", "How?", and "Weather prediction AI + Sewer cleaning robot + Water level detection robot".](README-images/IdeaBoard.en.jpg)
 
 Today, climate change is causing more frequent rainy seasons and localized heavy rains, which are increasing the frequency of damage.<sup>2</sup>
 
